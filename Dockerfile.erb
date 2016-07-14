@@ -1,0 +1,24 @@
+# encoding: UTF-8
+
+FROM <%= ENV.fetch('FROM') %>
+MAINTAINER The Blue Beluga <admin@bluebeluga.io>
+
+LABEL vendor="The Blue Beluga Company"
+LABEL io.bluebeluga.cadvisor.description="Alpine Linux Base with cAdvisor"
+LABEL io.bluebeluga.cadvisor.version="<%= ENV.fetch('TAG') %>"
+LABEL io.bluebeluga.cadvisor.git-revision="<%= ENV.fetch('GIT_REVISION') %>"
+LABEL io.bluebeluga.cadvisor.release-date="<%= Time.now.strftime('%B %d, %Y %H:%M') %>"
+
+ENV CADVISOR_VERSION <%= ENV.fetch 'CADVISOR_VERSION' %>
+ENV CADVISOR_SHA256 <%= ENV.fetch 'CADVISOR_SHA256' %>
+
+RUN apk-install --no-cache curl ca-certificates util-linux && \
+    curl -sSL "https://github.com/google/cadvisor/releases/download/v${CADVISOR_VERSION}/cadvisor" -o /usr/bin/cadvisor && \
+    echo "${CADVISOR_SHA256}  /usr/bin/cadvisor" | sha256sum -c - && \
+    chmod +x /usr/bin/cadvisor && \
+    apk del curl ca-certificates && \
+    rm -rf /var/cache/apk/*
+
+EXPOSE 8080
+COPY files/entrypoint.sh /
+ENTRYPOINT ["/entrypoint.sh"]
