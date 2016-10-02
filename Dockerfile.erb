@@ -4,7 +4,7 @@ FROM <%= ENV.fetch('FROM') %>
 MAINTAINER The Blue Beluga <admin@bluebeluga.io>
 
 LABEL vendor="The Blue Beluga Company"
-LABEL io.bluebeluga.cadvisor.description="Alpine Linux Base with cAdvisor"
+LABEL io.bluebeluga.cadvisor.description="cAdvisor"
 LABEL io.bluebeluga.cadvisor.version="<%= ENV.fetch('TAG') %>"
 LABEL io.bluebeluga.cadvisor.git-revision="<%= ENV.fetch('GIT_REVISION') %>"
 LABEL io.bluebeluga.cadvisor.release-date="<%= Time.now.strftime('%B %d, %Y %H:%M') %>"
